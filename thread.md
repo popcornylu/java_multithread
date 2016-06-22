@@ -25,7 +25,10 @@ new Thread(() -> {
 2. 執行很耗運算的task，或稱CPU bound task。當這種task多，我們會想要使用多個CPU Core的能力。單執行緒的程式用到只能用到Single Core的好處，也就是程式再怎麼耗CPU，最多就用到一個CPU。當使用Multi-Thraed的時候，就可以把CPU吃飽吃滿不浪費。
 3. 非同步執行。其實不管是IO-bound task或是CPU-bound task，我們應該都還是要跟主程式做溝通，所以通常的概念都是開一個Thread去做IO bound或是CPU bound task，等到他們做完了，我再把結果拿到我的主程式做後續的處理。當然新開Thread不是唯一的方法，我們稍後的章節會入續提到很多非同步執行的策略跟方法。
 4. 排程。常見的排程方法有三種。第一種是Delay，例如一秒鐘後執行一個job。第二種是週期性的，例如每一秒鐘執行一個job。第三種是指定時間執行一個job。當然這些應用會包裝在`Timer`或是`ScheduledThreadPoolExecutor`中，但是底層都還是用Thread去完成的。
-5. Daemon，或是稱之為Service。有些時候我們需要某個Thread固定去等某些event發生的時候才會去做特別的事情。例如寫Web Server，我們會希望
+5. Daemon，或是稱之為Service。有些時候我們需要某個Thread固定去等某些event發生的時候才會去做特別的事情。例如寫Server，我們會希望有一個Thread專門去listen某個port的連線訊息。如果我們寫一個Queue的Consumer，我們也會去有個Thread去聽message來的event。
+
+
+我們在寫Java程式中，其實我們每天都在跟Thread共舞，即便我們沒有直接產生這些Thread，但是可能我們所用的Framework都已經建構在Multi-thread的環境之上，因此我們更需要瞭解Multi-Thread的課題。下個章節我們來討論Thread之間的Synchroinzation的問題。
 
 
 
