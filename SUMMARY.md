@@ -5,6 +5,7 @@
 * [Data Synchronization](sync.md)
    * [Resource Sharing](resource_sharing.md)
    * Flow Control
+   * Data Passing
 * [Thread Pool](pool.md)
 * [Collection API](collection.md)
 * [ForkJoinPool](forkjoin.md)
