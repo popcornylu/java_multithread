@@ -4,6 +4,7 @@
 * [Java Thread](thread.md)
 * [Data Synchronization](sync.md)
    * [Resource Sharing](resource_sharing.md)
+   * Flow Control
 * [Thread Pool](pool.md)
 * [Collection API](collection.md)
 * [ForkJoinPool](forkjoin.md)
