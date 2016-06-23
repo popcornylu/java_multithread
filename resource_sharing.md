@@ -114,7 +114,7 @@ newStr = str + "2";
 此時的`newStr`跟`str`會是兩個獨立的object。這種方式最大的好處是即便很多thread去存取也不用去lock，可以增加平行化的程度。
 
 
-# Other Utitlities
+# Other Utilities
 
 在java中還有其他部分也跟resource sharing有關，例如
 
