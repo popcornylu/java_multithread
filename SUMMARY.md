@@ -9,5 +9,7 @@
 * [Thread Pool](pool.md)
    * [Basic Pool](basicpool.md)
    * [ForkJoinPool](forkjoin.md)
-* [Future](future.md)
+* [Asynchorous Invokation](async.md)
+    * [Future](future.md)
+    * [Completable Future](cfuture.md)
 
