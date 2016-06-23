@@ -49,7 +49,7 @@ synchronized(myObject){...}
 
 # Race Condition
 
-另外一個既端就是Race Condition，通常發生在沒有對resource做synchonized保護。例如下面這個程式碼就是會有race condition
+另外一個極端就是Race Condition，通常發生在沒有對resource做synchonized保護。例如下面這個程式碼就是會有race condition
 
 ```java
 public class MyClass {
