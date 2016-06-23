@@ -3,7 +3,7 @@
 * [Synchronization](sync.md)
    * [Resource Sharing](resource_sharing.md)
    * [Flow Control](flow_control.md)
-   * [Data Passing](data_passing.md)
+   * [Message Passing](message_passing.md)
 * [Thread Pool](pool.md)
    * [Basic Pool](basicpool.md)
    * [ForkJoinPool](forkjoin.md)
