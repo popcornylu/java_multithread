@@ -1,8 +1,8 @@
 # Resource Sharing
 
-Resource Sharing是Multi-Thread第一個要遇到的課題，也是最重要的課題。Thread之間本來就是共用同一個address space，所以大家都可以用到所有在JVM中的物件，只要存取得到。那就馬上衍生的問題就是大家一起用的時候該怎麼辦?
+Resource Sharing是Multi-Thread第一個要遇到的課題，也是最重要的課題。如第一章所言，Thread之間本來就是共用同一個address space，所以大家都可以用到在JVM中的所有物件，只要存取得到。那就馬上衍生的問題就是大家一起用的時候該怎麼管理狀態?
 
-在Java中有一個非常好用的keyword是`synchronized`，他有以下幾種用法
+在Java中有一個非常好用的keyword是`synchronized`來處理物件共用的問題。他有以下幾種用法
 
 ```java
 synchronized(myReource) {
@@ -10,7 +10,7 @@ synchronized(myReource) {
 }
 ```
 
-上面這段code可以保證同時只有你目前執行中的Thread可以跑這段code，當然如果你在要執行這段程式碼的時候，已經有其他thread在使用，那就要等他執行行完這個Block你才有機會輪到你去使用。
+上面這段code可以保證同時只有你目前執行中的thread可以跑這段code，當然如果你在要執行這段程式碼的時候，已經有其他thread在使用，那就要等他執行行完這個Block你才有機會輪到你去使用。
 
 另外一種做法是包在method的定義前面
 
