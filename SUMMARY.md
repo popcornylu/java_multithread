@@ -7,7 +7,6 @@
    * [Flow Control](flow_control.md)
    * [Data Passing](data_passing.md)
 * [Thread Pool](pool.md)
-* [Collection API](collection.md)
-* [ForkJoinPool](forkjoin.md)
+   * [ForkJoinPool](forkjoin.md)
 * [Future](future.md)
 
