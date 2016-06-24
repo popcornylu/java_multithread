@@ -16,9 +16,11 @@ synchronized(myReource) {
 
 ```java
 public synchronized void myMethod() {
+    //code
 }
 
 public static synchronized void myStaticMethod() {
+    //code
 }
 ```
 
@@ -27,11 +29,13 @@ public static synchronized void myStaticMethod() {
 ```java
 public void myMethod() {
     synchronized(this) {
+        //code
     }
 }
 
-public static synchronized void myStaticMethod() {
+public static void myStaticMethod() {
      synchronized(MyClass.class) {
+         //code
      }
 }
 ```
