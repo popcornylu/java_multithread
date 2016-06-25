@@ -70,10 +70,9 @@ consume message: helloworld
 
 另外有一個`Object#notifyAll()` method其實跟`Object#notify()`類似前者一次叫醒所有waiting threads，後者只會叫醒一個waiting thread。
 
-
 ## Thread Join
 
-另外一種更簡單的做法就是thread join。**Join**這個動詞在流程同步的時候常常會使用，他代表的就是等待別人的完成；而相對的詞是**Fork**，代表的是把工作發包給別的thread開始做。
+另外一種更簡單的做法就是thread join。**Join**這個動詞在流程同步的時候常常會使用，它代表的是等待別人工作的完成；而相對的詞是**Fork**，代表的是把工作發包給別的thread開始做。
 
 下面的程式碼則是一個簡單的範例，我們產生一個worker thread來執行我們的task，在我們的main thread中去**join**這個worker
 
@@ -96,7 +95,7 @@ worker.join();
 System.out.println("master complete");
 ```
 
-此程式碼的output會是這樣，可以看到master要等worker完成後，才會繼續往下執行。
+此程式碼的output會像下面這樣，可以看到master要等worker完成後，才會繼續往下執行。
 
 ```
 master wait
@@ -107,8 +106,8 @@ master complete
 
 ## Other Utilities
 
-其他還有一些工具可以幫你做Flow Control
+礙於篇幅關係(~~還是因為懶~~)，其他還有一些工具可以幫你做flow control
 
-- [CyclicBarrier](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/CyclicBarrier.html): Barrier算是一個幾同步的時候很常用的術語，代表的是所有的thread都到某著stage的時候，再繼續往下走。這概念就很像出遊的時候都會在一個地點集合，全部都到齊了再一起出發的概念。
+- [CyclicBarrier](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/CyclicBarrier.html): Barrier算是一個流程同步的時常用的術語，代表的是所有的threads都需要到達某著stage的時候，才繼續往下走。這概念就很像出遊的時候，大家會在一個地點集合，全員到齊了再一起出發的概念。
 - [CountDownLatch](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/CountDownLatch.html): 其實就如其名，是一個倒數的概念。每呼叫一次`countdown()`則倒數的counter就會減一，當一個thread去呼叫`await()`時，會一直卡在那邊，直到counter歸零為止，才會繼續往下走。
-- [Future](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/Future.html) and [Completable Future](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/CompletableFuture.html): 這個是Flow Control更高層次的封裝，因為內容比較多，我們會在後面的章節討論。
+- [Future](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/Future.html) and [Completable Future](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/CompletableFuture.html): 這個是Flow Control更高層次的封裝，因為內容比較多，我留在後面的章節再做討論。
