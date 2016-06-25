@@ -71,7 +71,7 @@ consume message: helloworld
 有關notify method，除了`Object#notify()`以外，還有一個`Object#notifyAll()`。前者一次只叫醒一個thread，後者會叫醒所有`wait()`此物件的threads。
 
 
-# Thread Join
+## Thread Join
 
 另外一種更簡單的做法就是thread join。**Join**這個動詞在流程同步的時候常常會使用，他代表的就是等待別人的完成；而相對的詞是**Fork**，代表的是把工作發包給別的thread開始做。
 
