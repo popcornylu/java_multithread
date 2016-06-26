@@ -123,4 +123,4 @@ public class Pipe {
 # Other Utility
 
 - [Pipe](https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Pipe.html): nio的版本。其實跟PipedInputStream跟PipedOutputStream類似。
-- Future and Comple
+- [Future](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/Future.html) and [Completable Future](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/CompletableFuture.html): 其實兩個都同時扮演了flow control跟message passing。一樣是留在後面的章節再做討論。
