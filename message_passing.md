@@ -4,7 +4,7 @@ Message passing簡單來講就是一個thread想把資料丟給另外一個threa
 
 工廠生產的時候，有一個名詞是生產線(pipeline)，每一站都把前一個站的產出變成下一站的來源，而最後一站的產出就是這個工廠的產品。其實這個概念可以想像每一站就是一個thread，而這些站跟站之間的半成品就可以稱它為message。而站跟站之間，會透過一個輸送帶當作管道傳遞，而這個管道我們稱為pipe或是queue。
 
-# Blocking Queue
+## Blocking Queue
 
 在Java中有一個非常好用並且現成的東西幫我們做Consumer/Producer Pattern，那就是[BlockingQueue](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/BlockingQueue.html)，我們可以透過它輕易做到之前所說的queue滿了讓producer block，以及queue空了讓conusmer block的結果。我把前面一個章節有關producer consumer的code改用BlockingQueue去作實現。
 
@@ -57,7 +57,7 @@ public class ProducerConsumer {
 ```
 可以看得到我們在produce中呼叫了`BlockingQueue#put()`，它會放一個message進queue中，如果滿了會block；同樣的在consume的地方呼叫`BlockingQueue#take()`，它會從queue中取一筆資料出來，如果queue是空的則會block。為了刻意讓queue比較容易滿，我把queue的constructor帶`5`進去，這代表的是它的容量。我們可以改變`main`中的sleep time，來模擬**供過於求**跟**供不應求**的狀況。
 
-# Pipe
+## Pipe
 
 有使用Unix/Linux的讀者應該很熟悉[pipe](https://en.wikipedia.org/wiki/Pipeline_(software%29)也就是`|`這個shell operation，這是Unix當初在設計的時候非常重要的[philosophy](https://en.wikipedia.org/wiki/Unix_philosophy):
 
@@ -125,7 +125,11 @@ public class Pipe {
 }
 ```
 
-# Other Utility
+## Other Utility
 
 - [Pipe](https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Pipe.html): nio的版本。其實跟`PipedInputStream`跟`PipedOutputStream`類似。
 - [Future](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/Future.html) and [Completable Future](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/concurrent/CompletableFuture.html): 其實兩個都同時扮演了flow control跟message passing。一樣是留在後面的章節再做討論。
+
+## Recap
+
+到這裡我們討論了resource sharing, flow control, message passing。這可以說multi-threading中最重要的三個議題。但是mult-thread程式不好撰寫，即使是知道了上面這些課題，但是還是很容易出錯。因次有必要把更high-level，更一般化的問題包裝成更好用的介面。後面章節我們會把thread pool跟asynchronous invokation這兩個常用的情境做更進一步介紹。
