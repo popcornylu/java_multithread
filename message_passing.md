@@ -120,3 +120,7 @@ public class Pipe {
 }
 ```
 
+# Other Utility
+
+- [Pipe](https://docs.oracle.com/javase/8/docs/api/java/nio/channels/Pipe.html): nio的版本。其實跟PipedInputStream跟PipedOutputStream類似。
+- Future and Comple
