@@ -4,7 +4,8 @@ Thread之間除了共用資料以外，流程同步也是常用到的一個技�
 
 ## Wait and notify
 
-在java中有關流程控制有一個最基本的primitive，那就是`Object#wait()`跟`Object#notify()`。當一個thread對一個物件呼叫`wait()`之後會完全卡住，要一直到另外一個thread觸法`notify()`才可以繼續往下執行。幾乎所有有關流程控制的邏輯最底層都是透過wait跟notify來實現。
+在java中有關流程控制有一個最基本的primitive，那就是`Object#wait()`跟`Object#notify()`。當一個thread對一個物件呼叫`wait()`之後會完全卡住，要一直到另外一個thread觸發
+`notify()`才可以繼續往下執行。幾乎所有有關流程控制的邏輯最底層都是透過wait跟notify來實現。
 
 我打算用一個簡化版的[Producer Consumer Pattern](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem)來解釋flow control。通常producer負責產生message，而consuemer負責接收並處理message。中間會有一個queue，當produce時queue是滿的，或是consume時queue是空的，那caller thread就會被blocked，直到狀態解除為止。但是為了方便解釋起見，這邊拿掉了queue，而只單純的讓producerd丟一個message給consumer而已。下面是一個範例程式:
 
