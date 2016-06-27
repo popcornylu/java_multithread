@@ -132,4 +132,4 @@ public class Pipe {
 
 ## Recap
 
-到這裡我們討論了resource sharing, flow control, message passing。這可以說multi-threading中最重要的三個議題。但是mult-thread程式不好撰寫，即使是知道了上面這些課題，但是還是很容易出錯。因次有必要把更high-level，更一般化的問題包裝成更好用的介面。後面章節我們會把thread pool跟asynchronous invokation這兩個常用的情境做更進一步介紹。
+到這裡我們討論了resource sharing, flow control, message passing。這可以說是multi-threading中最重要的三個議題。但是mult-thread程式不好撰寫，即使是知道了上面這些課題，還是很容易出錯。因次有必要把更high-level，更一般化的問題包裝成更好用的介面。後面章節我們會把thread pool跟asynchronous invokation這兩個常用的情境做更進一步介紹。
