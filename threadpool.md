@@ -81,7 +81,7 @@ public class ThreadPool implements Runnable{
 
 另外在constructor中我們有一個參數是`numberOfThreads`，也就是這個thread pool中產生threads的個數，而每個thread的執行內容是一個infinite loop，做的事情就不斷的從queue中拿一個task出來，去執行裡面的內容。
 
-在main method中我產生了一個thread pool，裡面有五個職員(thread)跟一個取票機(queue)。而我抽了十張號碼牌(task)，在當中隨機了睡了一段時間並且印出訊息，最後執行的結果大概會像下面這樣。
+在main method中我產生了一個thread pool，裡面有五個職員(thread)跟一個取票機(queue)。而我抽了十張號碼牌(task)，在當中隨機睡了一段時間並且印出訊息，最後執行的結果大概會像下面這樣。
 
 ```
 Thread-1: task 1 complete
