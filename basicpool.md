@@ -86,7 +86,7 @@ Methods | Description
 schedule | 讓task可以在一段時間之後才執行。
 scheduleAtFixedRate | 除了可以讓task在一段時間之後才執行之外，還可以固定週期執行
 
-在看玩thread pool的抽象定義之後，我們來看看有哪些現成的實作可以拿來使用。
+在看完thread pool的抽象定義之後，我們來看看有哪些現成的實作可以拿來使用。
 
 ## Executors
 
