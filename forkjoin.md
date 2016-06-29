@@ -10,9 +10,11 @@
 
 當一個小工作完成之後，他會從最後端的task拿出來(其實這邊比較像stack的行為)，繼續往下做。當然recursion的程式除了divide以外，還有merge results的動作，這邊稱之為join。join會取得每個subtask的結果，最終成為目前task的結果回傳回去。
 
-我們先來比較費式數列recursion版本跟forkjoin版本的差異
+那其他thread呢? 當其他thread身上的queue是空的時候，他會去別的thread的queue最前頭steal一個task到自己的queue當中。之後的行為就跟前面一模一樣。這有沒有很像一個團隊做專案的時候的行為? 所以如果我們把thread pool類比為取票機，forkjoin pool就很像做專案一樣。
 
-*recursion*
+## How to use
+
+前面講的是概念，現在來講實際怎麼實作。我拿費式數列當作例子，雖然他recursion不是他的最佳解法，但是他的定義很recursive。為了解釋方便，我們先不管它的效能。來看傳統recursion版本
 ```java
 public int fib(int n) {
     if (n <= 1)
@@ -20,24 +22,8 @@ public int fib(int n) {
     return fib(n-1) + fib(n-2);
 }
 ```
-*forkjoin*
-```java
-public Integer compute() {        
-    if (n <= 1)
-        return n;
-    Fibonacci f1 = new Fibonacci(n - 1);
-    f1.fork();
-    Fibonacci f2 = new Fibonacci(n - 2);
-    return f2.compute() + f1.join();
-}
-```
 
-那其他thread呢? 當其他thread身上的queue是空的時候，他會去別的thread的queue，從queue的前頭steal一個task到自己的queue當中。之後的行為就跟前面一模一樣。這有沒有很像一個團隊做專案的時候的行為? 所以以後就可以把thread pool類比為取票機，forkjoin pool就很像做專案一樣。
-
-## How to use
-
-前面講的是概念，現在來講實際怎麼實作。在Java中，可以用一個現有的common forkjoin pool，也就是`ForkJoinPool.commonPool()`。而我們的recursion task要繼承於[RecursiveTask](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/RecursiveTask.html)或是[RecursiveAction](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/RecursiveAction.html)。前者是有回傳值，後者沒有。如果完整的code會長這樣。之後實作`compute()`裡面執行divide and conquer的邏輯即可。下面是上面費式數列的完整代碼。
-
+再來是ForkJoin版本
 ```java
 public class Fibonacci extends RecursiveTask<Integer> {
     final int n;
@@ -51,20 +37,28 @@ public class Fibonacci extends RecursiveTask<Integer> {
         Fibonacci f2 = new Fibonacci(n - 2);
         return f2.compute() + f1.join();
     }
-
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        Fibonacci fibonacci = new Fibonacci(10);
-        ForkJoinPool.commonPool().execute(fibonacci);
-        System.out.println(fibonacci.get());
-    }
 }
 ```
 
+Recursion task要繼承於[RecursiveTask](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/RecursiveTask.html)或是[RecursiveAction](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/RecursiveAction.html)。前者是有回傳值，後者沒有。繼承需要實作`compute()`這個method，裡面實作divide and conquer的邏輯。在當中我們可以直接呼叫subtask的`compute()`，也可以呼叫subtask的`fork()`，代表的是把subtask丟到queue。等到需要他的結果時，再呼叫`join()`，它會把subtask結果回傳回來，再把所有的result去整合成目前task的result。
+
+實際執行我們需要有一個ForkJoinPool。我們可以直接用大家共用的common forkjoin pool，也就是`ForkJoinPool.commonPool()`。下面是執行這個RecursiveTask的範例
+
+```java
+public static void main(String[] args) throws ExecutionException, InterruptedException {
+    Fibonacci fibonacci = new Fibonacci(10);
+    ForkJoinPool.commonPool().execute(fibonacci);
+    System.out.println(fibonacci.get());
+}
+```
+
+
+
 #跟傳統Thread Pool比較
 
-其實這是兩種不同的執行策略。分別是producer consumer跟recursion。前者適合每個task是獨立的，他把不管大事小事都可以平均分攤在每個thread做；後者是透過divide and conquer的演算法，用work stealing的方式去執行。所以主要還是要看你的task是哪一種類型比較多。
+其實這是兩種不同的執行策略，分別是producer consumer跟recursion。前者適合每個task是獨立的，他可以把大事小事都平均分攤在每個thread去執行；後者是透過divide and conquer演算法，用work stealing的方式去執行。所以主要還是要看你的task是哪一種類型居多。
 
-而ForkJoinPool有一個很大的好處是減少thread因為blocking造成context switching。不管是fork, compute, join都幾乎不會blocking(只有join少數情況會要等待結果)。這可以讓thread一直保持running的狀態，一直到時間到了被context switch，而不是自己卡住了馬上context switch。
+而ForkJoinPool有一個很大的好處是減少thread因為blocking造成context switching。不管是fork, compute, join都幾乎不會blocking(只有join少數情況會要等待結果)。這可以讓thread一直保持running的狀態，一直到時間到了被context switch，而不是自己卡住了造成的context switch。
 
 但ForkJoinPool對於不可分割的task，並且處理時間差異很大的情境比較不適合，畢竟每個thread都有一個queue。就很像在大賣場排隊結帳，只要運氣不好排到一個前面卡比較久的task就要等比較久。但是別排又沒有閒到可以把你steal走，那就沒有辦法做到先到先處理的特性了。
 
