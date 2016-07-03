@@ -227,5 +227,5 @@ Method | Description
 
 CompletableFuture跟lambda的組合，在java8中帶來了非同步的生力軍。Lambda讓之前的annoymous inner class來實作async task會變成簡潔非常多，而Completable future又多了composible跟combinable，讓複雜的非同步流程變得非常的簡潔。
 
-再來就如前面講的，大部分的method都有async，以及async with executor。所以我們可以很明確指定到底我的task是擺在哪一個thread pool跑。對於UI程式，常常有一個pattern就是先async到worker thread pool去執行，處理完再到UI thread去update UI並且呈現，這個流程在新的CompletableFuture下變得更為簡潔容易。
+再來就如前面講的，大部分的method都有**async**，以及**async with executor**的版本。所以我們可以很明確指定到底我的task是擺在哪一個thread pool跑。對於UI程式，常常有一個pattern就是先async到worker thread pool去執行，處理完再到UI thread去update UI並且呈現，這個流程在新的CompletableFuture下變得更為簡潔容易。
 
