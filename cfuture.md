@@ -25,5 +25,5 @@ CompletableFuture是一個Future的實作，我打算以這四個特性來討論
 3. 當執行玩這個async task，則會呼叫的會先產生一個CompletableFuture的`complete()`
 4. 此時這個CompletableFuture的`get()`就可以取得結果的值。
 
-其實這跟我們在[Flow Control](flowcontrol.md)的章節看到的`wait()`/`notify()`極為相似，比較不一樣的就是這不只是流程同步，還帶有回傳值。
+其實這跟我們在[Flow Control](flow_control.md)的章節看到的`wait()`/`notify()`極為相似，比較不一樣的就是這不只是流程同步，還帶有回傳值。
 
