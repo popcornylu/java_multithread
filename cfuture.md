@@ -62,7 +62,7 @@ Method | Description
 
 Method |  Description
 -------|----------------------
-[complete(T t)](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#complete-T-) | 非同步執行完成並回傳結果
+[complete(T t)](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#complete-T-) | 完成非同步執行，並回傳結果
 [completeExceptionally(Throwable ex)](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#completeExceptionally-java.lang.Throwable-) | 非同步執行不正常的結束
 
 有了以上的概念，我們很快的可以很快地寫出`CompletableFuture.runAsync()`可能的邏輯
@@ -187,15 +187,17 @@ Method | Trasnformer | To Type
 [thenApply()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenApply-java.util.function.Function-) | ```Function<T, U>``` |  ```CompletableFuture<U>```
 [thenCompose()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenCompose-java.util.function.Function-) | ```Function<T, CompletableFuture<U>>``` |  ```CompletableFuture<U>```
 
-型態的部分我有稍微調整一下，讓它比較容易讀。但是我們都可以看到他們都有一個特性，就是把原本某個CompletableFuture的type parameter，經過一個transformer後，轉成另外一個Type的CompletableFuture，這就是Monad中的map。而最後一個因為他的回傳值本來就是CompletableFuture，這種轉換我們稱之為flatmap。其實同樣的概念在Optional API跟Stream API都找得到，有興趣可以去尋寶一下。
+型態的部分我有稍微調整一下，讓它比較容易讀。但是我們都可以看到他們都有一個特性，就是把原本某個CompletableFuture的type parameter，經過一個transformer後，轉成另外一個Type的CompletableFuture，這就是Monad中的**map**。而最後一個因為他的回傳值本來就是CompletableFuture，這種轉換我們稱之為**flatmap**。其實同樣的概念在Optional API跟Stream API都找得到，有興趣可以去尋寶一下。
 
 這些method也都有`xxx()`, `xxxAsync(func)`, `xxxAsync(func, executor)`三個版本，就如前面所述。
 
-經過這樣的轉換過程，我們把很多的future合併成單一的future。這些轉換我們沒有看到任和的exception處理，因為在任何一個階段出現exception，對於整個包起來的future就是exception。所以我們就是希望把每一個小的async invocation **compose**成一個大的async invocation。
+經過這樣的轉換過程，我們把很多的future合併成單一的future。這些轉換我們沒有看到任何的exception處理，因為在任何一個階段出現exception，對於整個包起來的future就是exception。所以我們就是希望把每一個小的async invocation **compose**成一個大的async invocation。
+
+同樣在guava library中，我們可以看到composible的蹤影，他是方在[Futures](https://google.github.io/guava/releases/19.0/api/docs/com/google/common/util/concurrent/Futures.html)下面的`transformXXX()`相關的methods。
 
 ## Combinable
 
-最後，async的流程有些時候不會是單一條路的，有時候更像是[DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph)(Directed Acyclic Graph)。例如做一個爬蟲程式(Crawler)，我們排一個文章的時候，可能會抓到很多個外部鏈結，這時候就會繼續展開。等到到了某個停止條件，我們就要等所有爬蟲的task完成，最終等於執行完這個大的async task。
+最後，async的流程有些時候不會是單一條路的，有時候更像是[DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph)(Directed Acyclic Graph)。例如做一個爬蟲程式(Crawler)，我們排一個文章的時候，可能會抓到很多個外部鏈結，這時候就會繼續展開更多非同步的task。等到到了某個停止條件，我們就要等所有爬蟲的task完成，最終等於執行完這個大的async task。
 
 這時候我們會希望把多個future完成時當作一個future的complete，這就是combinable的概念。跟composible的概念不同的是，composible是一個串一個，比較像是串連的感覺；相對的combinable，就比較像是並聯。
 
@@ -211,9 +213,9 @@ Method | With | Transformer | Return Type
 [applyToEither()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#applyToEither-java.util.concurrent.CompletionStage-java.util.function.Function-) | `CompletableFuture<T>` | `Function<T,U>` | `CompletableFuture<U>`
 [thenCombine()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenCombine-java.util.concurrent.CompletionStage-java.util.function.BiFunction-) | `CompletableFuture<U>` | `BiFunction<T,U,V>` | `CompletableFuture<V>`
 
-跟Composible那邊的method不一樣的是多了一個*with*，代表的是combine的對象。這些method都有可以把兩個future **combine**成一個future的特色。而both跟either，代表的是兩個都完成才算完成，還是其中一個完成則算完成。
+跟Composible那邊的method不一樣的是多了一個*with*，代表的是combine的對象。這些method都有可以把兩個future **combine**成一個future的特色。而**both**跟**either**，代表的是兩個都完成才算完成，還是其中一個完成則算完成。
 
-除了兩兩combine的這些method以外，CompletableFuture還有提供兩個static method來做combine多個future。
+除了兩兩combine的這些method以外，CompletableFuture還有提供兩個static methods來做combine多個futures。
 
 Method | Description
 -------|-------------
@@ -221,5 +223,9 @@ Method | Description
 [anyOf(...)](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#anyOf-java.util.concurrent.CompletableFuture...-) | 回傳一個future，其中任何一個future完成則此future就算完成。
 
 
+## 總結
 
+CompletableFuture跟lambda的組合，在java8中帶來了非同步的生力軍。Lambda讓之前的annoymous inner class來實作async task會變成簡潔非常多，而Completable future又多了composible跟combinable，讓複雜的非同步流程變得非常的簡潔。
+
+再來就如前面講的，大部分的method都有async，以及async with executor。所以我們可以很明確指定到底我的task是擺在哪一個thread pool跑。對於UI程式，常常有一個pattern就是先async到worker thread pool去執行，處理完再到UI thread去update UI並且呈現，這個流程在新的CompletableFuture下變得更為簡潔容易。
 
