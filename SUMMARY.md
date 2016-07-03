@@ -9,5 +9,5 @@
    * [ForkJoinPool](forkjoin.md)
 * [Asynchronous](async.md)
    * [Future](future.md)
-   * [Completable Future](cfuture.md)
+   * [CompletableFuture](cfuture.md)
 * [Conclusion](conclusions.md)
