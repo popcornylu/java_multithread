@@ -199,17 +199,23 @@ Method | Trasnformer | To Type
 
 這時候我們會希望把多個future完成時當作一個future的complete，這就是combinable的概念。跟composible的概念不同的是，composible是一個串一個，比較像是串連的感覺；相對的combinable，就比較像是並聯。
 
-來看看CompletableFuture針對這種應用有哪些method
+來看看CompletableFuture針對這種應用有哪些method，假設原始形態`CompletableFuture<T>`
 
 
 Method | With | Transformer | Return Type
 -------|-----------|-----------
-runAfterBoth | `CompletableFuture<?>` | `Runnable` | `CompletableFuture<Void>`
-runAfterEither | `CompletableFuture<?>` | `Runnable` | `CompletableFuture<Void>`
-thenAcceptBoth | `CompletableFuture<U>` | `BiConusmer<T,U>` | `CompletableFuture<Void>`
-acceptEither | `CompletableFuture<T>` | `Conusmer<T>` | `CompletableFuture<Void>`
-applyToEither | `CompletableFuture<T>` | `Function<T, U>` | `CompletableFuture<U>`
-thenCombine | `CompletableFuture<U>` | `BiFunction<T,U,V>` | `CompletableFuture<V>`
+[runAfterBoth()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#runAfterBoth-java.util.concurrent.CompletionStage-java.lang.Runnable-) | `CompletableFuture<?>` | `Runnable` | `CompletableFuture<Void>`
+[runAfterEither()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#runAfterEither-java.util.concurrent.CompletionStage-java.lang.Runnable-) | `CompletableFuture<?>` | `Runnable` | `CompletableFuture<Void>`
+[thenAcceptBoth()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenAcceptBoth-java.util.concurrent.CompletionStage-java.util.function.BiConsumer-) | `CompletableFuture<U>` | `BiConusmer<T,U>` | `CompletableFuture<Void>`
+[acceptEither()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#acceptEither-java.util.concurrent.CompletionStage-java.util.function.Consumer-) | `CompletableFuture<T>` | `Conusmer<T>` | `CompletableFuture<Void>`
+[applyToEither()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#applyToEither-java.util.concurrent.CompletionStage-java.util.function.Function-) | `CompletableFuture<T>` | `Function<T,U>` | `CompletableFuture<U>`
+[thenCombine()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenCombine-java.util.concurrent.CompletionStage-java.util.function.BiFunction-) | `CompletableFuture<U>` | `BiFunction<T,U,V>` | `CompletableFuture<V>`
 
+跟Composible那邊的method不一樣的是多了一個*with*，代表的是combine的對象。這些method都有可以把兩個future **combine**成一個future的特色。而both跟either，代表的是兩個都完成才算完成，還是其中一個完成則算完成。
 
+除了兩兩combine的這些method以外，CompletableFuture還有提供兩個static method來做combine多個future。
 
+Method | Description
+-------|-------------
+[allOf(CompletableFuture<?>... cfs)](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#allOf-java.util.concurrent.CompletableFuture...-) | 
+[anyOf(CompletableFuture<?>... cfs)](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#anyOf-java.util.concurrent.CompletableFuture...-) | 
