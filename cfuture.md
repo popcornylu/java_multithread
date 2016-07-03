@@ -37,7 +37,7 @@ Method | Description
 1. Completable
 2. Listenable
 3. Composible
-4. Mergable
+4. Combinable
 
 ## Completable
 
@@ -193,10 +193,23 @@ Method | Trasnformer | To Type
 
 經過這樣的轉換過程，我們把很多的future合併成單一的future。這些轉換我們沒有看到任和的exception處理，因為在任何一個階段出現exception，對於整個包起來的future就是exception。所以我們就是希望把每一個小的async invocation **compose**成一個大的async invocation。
 
-## Mergable
+## Combinable
+
+最後，async的流程有些時候不會是單一條路的，有時候更像是[DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph)(Directed Acyclic Graph)。例如做一個爬蟲程式(Crawler)，我們排一個文章的時候，可能會抓到很多個外部鏈結，這時候就會繼續展開。等到到了某個停止條件，我們就要等所有爬蟲的task完成，最終等於執行完這個大的async task。
+
+這時候我們會希望把多個future完成時當作一個future的complete，這就是combinable的概念。跟composible的概念不同的是，composible是一個串一個，比較像是串連的感覺；相對的combinable，就比較像是並聯。
+
+來看看CompletableFuture針對這種應用有哪些method
 
 
-
+Method | With | Transformer | Return Type
+-------|-----------|-----------
+runAfterBoth | `CompletableFuture<?>` | `Runnable` | `CompletableFuture<Void>`
+runAfterEither | `CompletableFuture<?>` | `Runnable` | `CompletableFuture<Void>`
+thenAcceptBoth | `CompletableFuture<U>` | `BiConusmer<T,U>` | `CompletableFuture<Void>`
+acceptEither | `CompletableFuture<T>` | `Conusmer<T>` | `CompletableFuture<Void>`
+applyToEither | `CompletableFuture<T>` | `Function<T, U>` | `CompletableFuture<U>`
+thenCombine | `CompletableFuture<U>` | `BiFunction<T,U,V>` | `CompletableFuture<V>`
 
 
 
