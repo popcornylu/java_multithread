@@ -85,9 +85,9 @@ public static CompletableFuture<Void> runAsync(Runnable runnable) {
 
 在Google的[Guava library](https://github.com/google/guava)中也可以看到completable的蹤影，那就是[SettableFuture](http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/util/concurrent/SettableFuture.html)。
 
-# Listenable
+## Listenable
 
-對於asynchronous invocation的caller來講，`Future`只提供了一個pulling result的方法，更多時候我們想要的是**好了叫我**這種語意，因此*Listenable*的特性，就是我們可以註冊一個callback，讓我可以listen執行完成的event。
+對於asynchronous invocation的caller來講，`Future`只提供了一個pulling result的方法，更多時候我們想要的是**好了叫我**這種語意。因此*Listenable*的特性，就是我們可以註冊一個callback，讓我可以listen執行完成的event。
 
 在CompletableFuture主要是透過[whenComplete()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#whenComplete-java.util.function.BiConsumer-)跟[handle()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#handle-java.util.function.BiFunction-)這兩個method。
 
@@ -95,6 +95,20 @@ Method |  Description
 -------|----------------------
 [whenComplete()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#whenComplete-java.util.function.BiConsumer-) | 當完成時，把result或exception帶到callback function中。
 [handle()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#handle-java.util.function.BiFunction-) | 當完成時，把result或exception帶到callback function中，並且回傳最後的結果。
+
+我再把最上面的例子改寫成用listener的方式
+```java
+CompletableFuture.runAsync(() -> {
+    try {
+        Thread.sleep(1000);
+        System.out.println("hello");
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}).whenComplete((result, throwable) -> {
+    System.out.println("world");
+});
+```
 
 這兩個method以及包含後面會提到的method都有三種變形，分別是
 
@@ -106,7 +120,7 @@ Method |  Description
 
 同樣在Guava library中也可以看到listenable的蹤影，那就是[ListenableFuture](http://google.github.io/guava/releases/snapshot/api/docs/com/google/common/util/concurrent/ListenableFuture.html)。
 
-# Composible
+## Composible
 
 有了Listenable的特性之後，我們就可以做到當完成時，在做下一件事情。如果接下來又是一個非同步的工作，那就可能會串成非常多層，我們稱之為callback hell。下面是個例子
 
@@ -149,3 +163,40 @@ public static void main(String[] args) throws InterruptedException {
         });
     });
 ```
+
+這個程式碼這樣三層可能已經受不了了，如果更多層應該會有噁心的感覺。這還不打緊，如果再加上錯誤處理，那可能更是暈頭轉向。
+
+對於這種一連串的invocation，如果可以把這些async function組起來，變成一個單一future，可能會舒服許多。先來看最後的結果，我們再來討論細節。
+
+```java
+CompletableFuture
+.runAsync(() -> sleep(1000))
+.thenRunAsync(() -> sleep(1000))
+.thenRunAsync(() -> sleep(1000))
+.whenComplete((r, ex) -> System.out.println("done"));
+```
+
+有沒有覺得清爽許多?這就是Composible的魅力。
+
+在CompletableFuture中，它提供了非常多的compose methods來幫助我們組合各種sync methods變成async methods。我來列舉一下
+
+Method | Trasnformer | To Type
+-------|-----------|-----------
+[thenRun()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenRun-java.lang.Runnable-) | ```Runnable``` | ```CompletableFuture<Void>```
+[thenAccept()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenAccept-java.util.function.Consumer-) | ```Consumer<T>``` | ```CompletableFuture<Void>```
+[thenApply()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenApply-java.util.function.Function-) | ```Function<T, U>``` |  ```CompletableFuture<U>```
+[thenCompose()](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#thenCompose-java.util.function.Function-) | ```Function<T, CompletableFuture<U>>``` |  ```CompletableFuture<U>```
+
+型態的部分我有稍微調整一下，讓它比較容易讀。但是我們都可以看到他們都有一個特性，就是把原本某個CompletableFuture的type parameter，經過一個transformer後，轉成另外一個Type的CompletableFuture，這就是Monad中的map。而最後一個因為他的回傳值本來就是CompletableFuture，這種轉換我們稱之為flatmap。其實同樣的概念在Optional API跟Stream API都找得到，有興趣可以去尋寶一下。
+
+這些method也都有`xxx()`, `xxxAsync(func)`, `xxxAsync(func, executor)`三個版本，就如前面所述。
+
+經過這樣的轉換過程，我們把很多的future合併成單一的future。這些轉換我們沒有看到任和的exception處理，因為在任何一個階段出現exception，對於整個包起來的future就是exception。所以我們就是希望把每一個小的async invocation **compose**成一個大的async invocation。
+
+## Mergable
+
+
+
+
+
+
