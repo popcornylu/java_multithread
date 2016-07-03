@@ -217,5 +217,9 @@ Method | With | Transformer | Return Type
 
 Method | Description
 -------|-------------
-[allOf(CompletableFuture<?>... cfs)](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#allOf-java.util.concurrent.CompletableFuture...-) | 
-[anyOf(CompletableFuture<?>... cfs)](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#anyOf-java.util.concurrent.CompletableFuture...-) | 
+[allOf(...)](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#allOf-java.util.concurrent.CompletableFuture...-) | 回傳一個future，其中所有的future都完成此future才算完成。 
+[anyOf(...)](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html#anyOf-java.util.concurrent.CompletableFuture...-) | 回傳一個future，其中任何一個future完成則此future就算完成。
+
+
+
+
