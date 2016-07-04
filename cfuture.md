@@ -43,12 +43,12 @@ Method | Description
 
 所謂的Completable就是這個future可以被complete。其實這要先討論Future跟Promise這兩個概念。
 
-1. Future: 是一個未來會完成的一個結果，算是這個結果的容器。所以前一章節我們整章都在介紹這個。
-2. Promise: 是可以被改變可以被完成的值，通常是非同步執行的結果。而CompletableFuture就是一個promise，可以**被完成**。
+1. Future: 是一個未來會完成的一個結果，算是這個結果的容器。Caller透過Future來等非同步執行的結果。
+2. Promise: 是可以被改變可以被完成的值，通常是非同步執行的結果。Callee透過Promise來告知非同步完成的結果。
 
 基本上就是一體兩面啦。對於asynchronous invocation，對於caller看到就是future，對於callee就是看到promise。而CompletableFuture就同時扮演了Future跟Promise兩種角色。
 
-所以基本上CompletableFuture會被上面這樣使用
+所以CompletableFuture會被下面這樣使用
 
 1. 在非同步呼叫時，會先產生一個CompletableFuture，並且回傳給caller
 2. 這個CompletableFuture會連同async task一起傳到worker thread中。
