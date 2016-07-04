@@ -52,8 +52,8 @@ Method | Description
 
 1. 在非同步呼叫時，會先產生一個CompletableFuture，並且回傳給caller
 2. 這個CompletableFuture會連同async task一起傳到worker thread中。
-3. 當執行完這個async task，則會呼叫的會先產生一個CompletableFuture的`complete()`
-4. 此時這個CompletableFuture的`get()`就可以取得結果的值。
+3. 當執行完這個async task，calle會呼叫CompletableFuture的`complete()`
+4. 此時caller可以透過CompletableFuture的`get()`取得結果的值。
 
 其實這跟我們在[Flow Control](flow_control.md)的章節看到的`wait()`/`notify()`極為相似，比較不一樣的就是這不只是流程同步，還帶有回傳值。除了complete以外，當執行錯誤的時候，也可以呼叫`completeExceptionally()`。
 
