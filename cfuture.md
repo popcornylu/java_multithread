@@ -193,7 +193,7 @@ Method | Trasnformer | To Type
 
 經過這樣的轉換過程，我們把很多的future合併成單一的future。這些轉換我們沒有看到任何的exception處理，因為在任何一個階段出現exception，對於整個包起來的future就是exception。所以我們就是希望把每一個小的async invocation **compose**成一個大的async invocation。
 
-同樣在guava library中，我們可以看到composible的蹤影，他是方在[Futures](https://google.github.io/guava/releases/19.0/api/docs/com/google/common/util/concurrent/Futures.html)下面的`transformXXX()`相關的methods。
+同樣在guava library中，我們可以看到composible的蹤影，他是放在[Futures](https://google.github.io/guava/releases/19.0/api/docs/com/google/common/util/concurrent/Futures.html)下面的`transformXXX()`相關的methods。
 
 ## Combinable
 
