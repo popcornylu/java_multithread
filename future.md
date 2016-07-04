@@ -1,6 +1,6 @@
 #Future
 
-[Future](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html)代表了是一個非同步呼叫的回傳結果，而這個結果會在未來某一個時間點可以取得。這樣講有點抽象，那舉個例子好了，送洗衣服就是一個非同步的呼叫，因為衣服是交給別人洗而非自己洗，而洗好的衣服是一個**未來**會發生的結果，這個結果被Future這個class包裝起來。
+[Future](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Future.html)是代表一個非同步呼叫的回傳結果，而這個結果會在未來某一個時間點可以取得。這樣講有點抽象，那舉個例子好了，送洗衣服就是一個非同步的呼叫，因為衣服是交給別人洗而非自己洗，而洗好的衣服是一個**未來**會發生的結果，這個結果被Future這個class包裝起來。
 
 我們再更具體一點的把它變成實際的程式碼，`Future`是一有一個型態參數的class，使用上大概會像這樣
 
