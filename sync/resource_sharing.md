@@ -85,7 +85,7 @@ public class MyClass {
 甚至可以直接用[AtomicInteger](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/AtomicInteger.html)來解決這個問題 
 ```java
 public class MyClass {
-    private AtomicInteger i = new AtomicInteger();
+    private final AtomicInteger i = new AtomicInteger();
 
     public int getAndIncr() {
         return i.getAndIncrement();
