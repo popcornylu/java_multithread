@@ -48,7 +48,7 @@ public static void myStaticMethod() {
 
 # Race Condition
 
-另外一個極端就是**Race condition**，通常發生在沒有對resource做synchonized保護。例如下面這個程式碼就是會有race condition
+另外一個極端就是**Race condition**，通常發生在沒有對resource做`synchronized`保護。例如下面這個程式碼就是會有race condition
 
 ```java
 public class MyClass {
