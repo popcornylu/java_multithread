@@ -94,7 +94,7 @@ public class MyClass {
 ```
 
 # Thread Safe
-當一個class或method可以在multi-thread環境下不會有race condition，我們可以稱此class或method為**thread safe**。此時你可以很放心的在multi-thread的環境操作這些resource而不用再包`synchronized`。但是thread safe並不是一個class或method一定要提供的責任，畢竟讓resource可以是thread safe必定有其代價。例如用了很多`synchronized`，但如果你只是在single thread的環境使用，那豈不是增加了執行的overhead? 另一種思考是，讓使用library的人去決定`synchronized`包裝的granuarity(顆粒度)也許會更適合。
+當一個class或method可以在multi-thread環境下不會有race condition，我們可以稱此class或method為**thread safe**。此時你可以很放心的在multi-thread的環境操作這些resource而不用再包`synchronized`。但是thread safe並不是一個class或method一定要提供的責任，畢竟讓resource可以是thread safe必定有其代價。例如用了很多`synchronized`，但如果你只是在single thread的環境使用，那豈不是增加了執行的overhead? 另一種思考是，讓使用library的人去決定`synchronized`包裝的granularity(顆粒度)也許會更適合。
 
 因此，在java collection library中，大部分的collection其實都不是thread safe。如果想讓你的collection是thread safe，可以透過[Collections](https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html)中的很多helper methods來提供。例如
 
