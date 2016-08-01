@@ -8,7 +8,7 @@ new Thread(() -> {
 }).start();
 ```
 
-都已經java8的時代了，我直接用java8的語法來介紹java thread。在上面的程式中產生了一個新的thread，thread的constructor是一個實作`java.lang.Runnable`的物件。當呼叫`start()`此method時，則會啟動這個thread，並且執行`Runnable#run()`。在java8中有好用的lambda，我們直接用lambda來實作那個runnalbe。當然你也可以用傳統的產生一個新的class來實作`Runnable`。因為這個文件不是要教你怎麼寫java，我就先假設你已經了解寫java的基本常識，如果你到這邊還不懂我在寫什麼，那建議可以先拿一本java入門書來了解java最基本的編程知識。
+都已經java8的時代了，我直接用java8的語法來介紹java thread。在上面的程式中產生了一個新的thread，thread的constructor是一個實作`java.lang.Runnable`的物件。當呼叫`start()`此method時，則會啟動這個thread，並且執行`Runnable#run()`。在java8中有好用的lambda，我們直接用lambda來實作那個runnable。當然你也可以用傳統的產生一個新的class來實作`Runnable`。因為這個文件不是要教你怎麼寫java，我就先假設你已經了解寫java的基本常識，如果你到這邊還不懂我在寫什麼，那建議可以先拿一本java入門書來了解java最基本的編程知識。
 
 # 使用時機
 
